@@ -1,0 +1,27 @@
+<br>
+<div>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>Active</th>
+            <th>Symbol</th>
+            <th>Amount</th>
+            <th>Buy Price</th>
+            <th>Current Price</th>
+            <th>Sell Price</th>
+            <th>Profit</th>
+        </tr>
+        {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.id }}</td>
+                <td>{{ stock.active }}</td>
+                <td>{{ stock.symbol }}</td>
+                <td>{{ stock.amount }}</td>
+                <td>{{ stock.buyPrice }}</td>
+                <td>{{ query.currentPrice(stock.symbol) }}</td>
+                <td>{{ stock.sellPrice }}</td>
+                <td>{{ stock.profit }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

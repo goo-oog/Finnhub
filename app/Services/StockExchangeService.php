@@ -5,5 +5,5 @@ namespace App\Services;
 
 interface StockExchangeService
 {
-    public function quoteCurrent(string $symbol):float;
+    public function currentPrice(string $symbol): float;
 }

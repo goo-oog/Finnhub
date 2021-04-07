@@ -5,8 +5,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AppController;
 use App\Controllers\NotFoundController;
+use App\Repositories\MySQLStocksRepository;
+use App\Repositories\StocksRepository;
 use App\Services\FinnhubStockExchangeService;
-use App\Services\GetQuoteService;
 use App\Services\StockExchangeService;
 use League\Container\Container;
 
@@ -15,8 +16,10 @@ session_start();
 
 $container = new Container();
 $container->add(StockExchangeService::class, FinnhubStockExchangeService::class);
-$container->add(GetQuoteService::class)->addArgument(StockExchangeService::class);
-$container->add(AppController::class)->addArgument(GetQuoteService::class);
+$container->add(StocksRepository::class, MySQLStocksRepository::class);
+//$container->add(GetQuoteService::class)->addArgument(StockExchangeService::class);
+//$container->add(AppController::class)->addArgument(GetQuoteService::class);
+$container->add(AppController::class)->addArguments([StockExchangeService::class,StocksRepository::class]);
 
 
 

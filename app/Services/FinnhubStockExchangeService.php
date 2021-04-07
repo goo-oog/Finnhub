@@ -21,7 +21,7 @@ class FinnhubStockExchangeService implements StockExchangeService
 //    public function api():DefaultApi{
 //        return $this->client;
 //    }
-    public function quoteCurrent(string $symbol):float{
+    public function currentPrice(string $symbol):float{
         return $this->client->quote($symbol)->getC();
     }
 }
