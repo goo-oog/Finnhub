@@ -17,6 +17,7 @@ class FinnhubStockExchangeService implements StockExchangeService
         $this->client = new DefaultApi(new Client(['verify' => '../storage/cacert.pem']), $config);
         //        To address cURL error 60: SSL certificate problem: unable to get local issuer certificate
         //        https://www.php.net/manual/en/curl.configuration.php
+        //        https://curl.se/docs/caextract.html
     }
 //    public function api():DefaultApi{
 //        return $this->client;
