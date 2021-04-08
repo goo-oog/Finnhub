@@ -19,10 +19,9 @@ class FinnhubStockExchangeService implements StockExchangeService
         //        https://www.php.net/manual/en/curl.configuration.php
         //        https://curl.se/docs/caextract.html
     }
-//    public function api():DefaultApi{
-//        return $this->client;
-//    }
-    public function currentPrice(string $symbol):float{
+
+    public function currentPrice(string $symbol): float
+    {
         return $this->client->quote($symbol)->getC();
     }
 }
