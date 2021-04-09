@@ -10,4 +10,8 @@ interface StocksRepository
     public function buyStock(string $symbol, float $amount, float $price): void;
 
     public function sellStock(int $id, float $price): void;
+
+    public function deleteStock(int $id):void;
+
+    public function money():float;
 }

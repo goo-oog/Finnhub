@@ -7,7 +7,7 @@ use App\Controllers\AppController;
 use App\Controllers\NotFoundController;
 use App\Repositories\MySQLStocksRepository;
 use App\Repositories\StocksRepository;
-use App\Services\FinnhubStockExchangeService;
+use App\Services\FinnhubService;
 use App\Services\StockExchangeService;
 use League\Container\Container;
 
@@ -15,7 +15,7 @@ use League\Container\Container;
 session_start();
 
 $container = new Container();
-$container->add(StockExchangeService::class, FinnhubStockExchangeService::class);
+$container->add(StockExchangeService::class, FinnhubService::class);
 $container->add(StocksRepository::class, MySQLStocksRepository::class);
 //$container->add(GetQuoteService::class)->addArgument(StockExchangeService::class);
 //$container->add(AppController::class)->addArgument(GetQuoteService::class);
@@ -25,7 +25,11 @@ $container->add(AppController::class)->addArguments([StockExchangeService::class
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->get('/', [AppController::class, 'showMainPage']);
+    $r->post('/', [AppController::class, 'showMainPage']);
+    $r->post('/buy', [AppController::class, 'buy']);
     $r->post('/sell', [AppController::class, 'sell']);
+    $r->post('/delete', [AppController::class, 'delete']);
+
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

@@ -12,6 +12,9 @@ class Stock
     private float $buyPrice;
     private ?float $sellPrice;
     private ?float $profit;
+    private ?string $name;
+    private ?float $currentPrice;
+    private ?string $logo;
 
     public function __construct(int $id, int $active, string $symbol, float $amount, float $buyPrice, ?float $sellPrice, ?float $profit)
     {
@@ -58,4 +61,35 @@ class Stock
     {
         return $this->profit;
     }
+
+    public function name(): ?string
+    {
+        return $this->name;
+    }
+
+    public function currentPrice(): ?float
+    {
+        return $this->currentPrice;
+    }
+
+    public function logo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setCurrentPrice(float $currentPrice): void
+    {
+        $this->currentPrice = $currentPrice;
+    }
+
+    public function setLogo(string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
 }

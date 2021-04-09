@@ -2,33 +2,54 @@
 <div>
     <table>
         <tr>
+            <td colspan="10">{{ money }}</td>
+        </tr>
+        <tr>
             <th></th>
-            <th>id</th>
             <th>Active</th>
             <th>Symbol</th>
+            <th>Name</th>
             <th>Amount</th>
             <th>Buy Price</th>
+            <th>Spent</th>
             <th>Current Price</th>
+            <th>Current Value</th>
+            <th></th>
             <th>Sell Price</th>
+            <th>Cashed</th>
             <th>Profit</th>
+            <th></th>
         </tr>
         {% for stock in stocks %}
             <tr>
-                <td>
-                    <form method="post" action="/sell">
-                        <input type="hidden" name="id" value="{{ stock.id }}"/>
-                        <input type="hidden" name="price" value="{{ query.currentPrice(stock.symbol) }}"/>
-                        <input type="submit" value="Sell"/>
-                    </form>
-                </td>
-                <td>{{ stock.id }}</td>
+                <td><img src="{{ stock.logo }}" style="height: 1.5em"></td>
                 <td>{{ stock.active }}</td>
                 <td>{{ stock.symbol }}</td>
+                <td>{{ stock.name }}</td>
                 <td>{{ stock.amount }}</td>
                 <td>{{ stock.buyPrice }}</td>
-                <td>{{ query.currentPrice(stock.symbol) }}</td>
+                <td>{{ stock.buyPrice*stock.amount }}</td>
+                <td>{% if stock.active %}{{ stock.currentPrice }}{% endif %}</td>
+                <td>{% if stock.active %}{{ stock.currentPrice*stock.amount }}{% endif %}</td>
+                <td>{% if stock.active %}
+                        <form method="post" action="/sell">
+                            <input type="hidden" name="id" value="{{ stock.id }}"/>
+                            <input type="hidden" name="price" value="{{ query.currentPrice(stock.symbol) }}"/>
+                            <input type="submit" value="Sell"/>
+                        </form>
+                    {% endif %}
+                </td>
                 <td>{{ stock.sellPrice }}</td>
+                <td>{{ stock.sellPrice*stock.amount }}</td>
                 <td>{{ stock.profit }}</td>
+                {% if not stock.active %}
+                    <td>
+                        <form method="post" action="/delete">
+                            <input type="hidden" name="id" value="{{ stock.id }}"/>
+                            <input type="submit" value="Delete"/>
+                        </form>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>

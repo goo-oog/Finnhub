@@ -34,23 +34,40 @@ class MySQLStocksRepository implements StocksRepository
 
     public function getAll(): array
     {
-        $stocks=[];
-        foreach ($this->pdo->query('SELECT * FROM stocks')->fetchAll() as $stock){
-            $stocks[]=new Stock(...$stock);
+        $stocks = [];
+        foreach ($this->pdo->query('SELECT * FROM stocks ORDER BY active DESC, id DESC')->fetchAll() as $stock) {
+            $stocks[] = new Stock(...$stock);
         }
         return $stocks;
     }
 
-    public function buyStock(string $symbol, float $amount, float $price):void
+    public function buyStock(string $symbol, float $amount, float $price): void
     {
+//        $this->pdo->beginTransaction();
+//        $this->pdo->exec("INSERT INTO stocks (symbol,amount,buy_price) VALUES ($symbol,$amount,$price)");
+//        $this->pdo->exec("UPDATE wallet SET money=money-(ROUND($amount*$price),2)");
+//        $this->pdo->commit();
+
         $this->pdo->prepare('INSERT INTO stocks (symbol,amount,buy_price) VALUES (?,?,?)')
             ->execute([$symbol, $amount, $price]);
+        $this->pdo->prepare('UPDATE wallet SET money=money-(ROUND(?*?,2)) WHERE id=1')
+            ->execute([$amount, $price]);
     }
 
-    public function sellStock(int $id, float $price):void
+    public function sellStock(int $id, float $price): void
     {
-        $this->pdo->prepare("UPDATE stocks SET active=0,sell_price=$price WHERE id=$id")->execute();
-        $this->pdo->prepare("UPDATE stocks SET profit=ROUND((sell_price-buy_price)*amount,2) WHERE id=$id")->execute();
-        $this->pdo->prepare("UPDATE stocks,wallet SET stocks.profit=ROUND((sell_price-buy_price)*amount,2),wallet.money=wallet.money+stocks.profit WHERE stocks.id=$id")->execute();
+        $this->pdo->beginTransaction();
+        $this->pdo->exec("UPDATE stocks SET sell_price=$price WHERE id=$id");
+        $this->pdo->exec("UPDATE stocks SET active=0 WHERE id=$id");
+        $this->pdo->exec("UPDATE stocks SET profit=ROUND((sell_price-buy_price)*amount,2) WHERE id=$id");
+        $this->pdo->exec("UPDATE wallet SET money=money+(SELECT ROUND(amount*buy_price+profit,2) FROM stocks WHERE id=$id) WHERE id=1");
+        $this->pdo->commit();
+    }
+    public function deleteStock(int $id):void{
+        $this->pdo->prepare("DELETE FROM stocks WHERE id=$id")->execute();
+    }
+
+    public function money():float{
+        return $this->pdo->query('SELECT money FROM wallet WHERE id=1')->fetch()[0];
     }
 }

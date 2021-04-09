@@ -1,0 +1,30 @@
+<br>
+<table>
+    <tr>
+        <td>
+            <form method="get" action="/">
+                <label for="search">Search for stock:</label>
+                <input type="search" id="search" oninput="this.value = this.value.toUpperCase()" name="symbol" required
+                       maxlength="5">
+                <input type="submit" value="Search">
+            </form>
+        </td>
+        {% if GET.symbol is defined %}
+            {% if price.c>0 %}
+                <td><img src="{{ info.logo }}" style="height: 1.5em"></td>
+                <td>{{ GET.symbol }}</td>
+                <td>{{ info.name }}</td>
+                <td>{{ price.c }}</td>
+                <td>
+                    <form method="post" action="/buy">
+                        <input type="hidden" name="symbol" value="{{ GET.symbol }}">
+                        <input type="number" name="amount" value="1">
+                        <input type="submit" value="Buy">
+                    </form>
+                </td>
+            {% else %}
+                <td>Stock with symbol "{{ GET.symbol }}" not found</td>
+            {% endif %}
+        {% endif %}
+    </tr>
+</table>
