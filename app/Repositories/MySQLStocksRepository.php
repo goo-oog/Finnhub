@@ -35,7 +35,7 @@ class MySQLStocksRepository implements StocksRepository
     public function getAll(): array
     {
         $stocks=[];
-        foreach ($this->pdo->query("SELECT * FROM stocks")->fetchAll() as $stock){
+        foreach ($this->pdo->query('SELECT * FROM stocks')->fetchAll() as $stock){
             $stocks[]=new Stock(...$stock);
         }
         return $stocks;
@@ -51,5 +51,6 @@ class MySQLStocksRepository implements StocksRepository
     {
         $this->pdo->prepare("UPDATE stocks SET active=0,sell_price=$price WHERE id=$id")->execute();
         $this->pdo->prepare("UPDATE stocks SET profit=ROUND((sell_price-buy_price)*amount,2) WHERE id=$id")->execute();
+        $this->pdo->prepare("UPDATE stocks,wallet SET stocks.profit=ROUND((sell_price-buy_price)*amount,2),wallet.money=wallet.money+stocks.profit WHERE stocks.id=$id")->execute();
     }
 }

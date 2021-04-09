@@ -32,4 +32,9 @@ class AppController
         return $this->twig->environment()->render('_main-page.twig', $this->twigVariables);
 
     }
+    public function sell():void{
+        var_dump($_POST);die();
+        $this->stocks->sellStock($_POST['id'],$_POST['price']);
+        header('Location:/');
+    }
 }

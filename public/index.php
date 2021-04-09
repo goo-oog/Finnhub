@@ -25,6 +25,7 @@ $container->add(AppController::class)->addArguments([StockExchangeService::class
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->get('/', [AppController::class, 'showMainPage']);
+    $r->post('/sell', [AppController::class, 'sell']);
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

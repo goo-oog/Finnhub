@@ -2,6 +2,7 @@
 <div>
     <table>
         <tr>
+            <th></th>
             <th>id</th>
             <th>Active</th>
             <th>Symbol</th>
@@ -13,6 +14,13 @@
         </tr>
         {% for stock in stocks %}
             <tr>
+                <td>
+                    <form method="post" action="/sell">
+                        <input type="hidden" name="id" value="{{ stock.id }}"/>
+                        <input type="hidden" name="price" value="{{ query.currentPrice(stock.symbol) }}"/>
+                        <input type="submit" value="Sell"/>
+                    </form>
+                </td>
                 <td>{{ stock.id }}</td>
                 <td>{{ stock.active }}</td>
                 <td>{{ stock.symbol }}</td>

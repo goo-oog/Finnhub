@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `stocks`;
 CREATE TABLE `stocks` (
   `id` int NOT NULL AUTO_INCREMENT,
   `active` tinyint(1) NOT NULL DEFAULT '1',
-  `symbol` tinytext COLLATE utf8mb4_0900_as_ci,
+  `symbol` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_ci,
   `amount` float DEFAULT NULL,
   `buy_price` float DEFAULT NULL,
   `sell_price` float DEFAULT NULL,
@@ -43,6 +43,27 @@ LOCK TABLES `stocks` WRITE;
 INSERT INTO `stocks` VALUES (1,1,'AAPL',2.35,125.5,NULL,NULL),(2,1,'MSFT',33.3,250,NULL,NULL),(4,1,'TSLA',4.2,677.68,NULL,NULL);
 /*!40000 ALTER TABLE `stocks` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `wallet`
+--
+
+DROP TABLE IF EXISTS `wallet`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wallet` (
+  `money` float DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wallet`
+--
+
+LOCK TABLES `wallet` WRITE;
+/*!40000 ALTER TABLE `wallet` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wallet` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -53,4 +74,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-08 23:21:48
+-- Dump completed on 2021-04-09  9:06:50
