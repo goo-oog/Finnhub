@@ -1,56 +1,122 @@
 <br>
 <div>
-    <table>
-        <tr>
-            <td colspan="10">{{ money }}</td>
-        </tr>
-        <tr>
-            <th></th>
-            <th>Active</th>
-            <th>Symbol</th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Buy Price</th>
-            <th>Spent</th>
-            <th>Current Price</th>
-            <th>Current Value</th>
-            <th></th>
-            <th>Sell Price</th>
-            <th>Cashed</th>
-            <th>Profit</th>
-            <th></th>
-        </tr>
+    <div class="border-4 border-4 border-gray-400 rounded-xl bg-gray-200 p-10 text-center">
         {% for stock in stocks %}
-            <tr>
-                <td><img src="{{ SESSION[stock.symbol].info.logo }}" style="height: 1.5em"></td>
-                <td>{{ stock.active }}</td>
-                <td>{{ stock.symbol }}</td>
-                <td>{{ SESSION[stock.symbol].info.name }}</td>
-                <td>{{ stock.amount }}</td>
-                <td>{{ stock.buyPrice }}</td>
-                <td>{{ stock.buyPrice*stock.amount }}</td>
-                <td>{% if stock.active %}{{ SESSION[stock.symbol].currentPrice }}{% endif %}</td>
-                <td>{% if stock.active %}{{ SESSION[stock.symbol].currentPrice * stock.amount }}{% endif %}</td>
-                <td>{% if stock.active %}
-                        <form method="post" action="/sell">
-                            <input type="hidden" name="id" value="{{ stock.id }}"/>
-                            <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/>
-                            <input type="submit" value="Sell"/>
-                        </form>
-                    {% endif %}
-                </td>
-                <td>{{ stock.sellPrice }}</td>
-                <td>{{ stock.sellPrice*stock.amount }}</td>
-                <td>{{ stock.profit }}</td>
-                {% if not stock.active %}
-                    <td>
-                        <form method="post" action="/delete">
-                            <input type="hidden" name="id" value="{{ stock.id }}"/>
-                            <input type="submit" value="Delete"/>
-                        </form>
-                    </td>
+
+            <div class="inline-block w-80 h-60 relative border-2 rounded-xl bg-gradient-to-b
+            {% if stock.active %}
+                {% if SESSION[stock.symbol].currentPrice >= stock.buyPrice %}
+                    border-green-700 from-green-500 to-gray-900 text-green-100
+                {% else %}
+                    border-red-700 from-red-500 to-gray-900 text-red-100
                 {% endif %}
-            </tr>
+            {% else %}
+                border-gray-700 from-gray-400 to-gray-700 text-gray-200
+            {% endif %}
+            ">
+
+                <img src="{{ SESSION[stock.symbol].info.logo }}" class="absolute left-2 top-2 w-16">
+                <div class="absolute right-2 top-2 text-right">
+                    <span class="block font-bold text-4xl">{{ stock.symbol }}</span>
+                    <span class="block">{{ SESSION[stock.symbol].info.name }}</span>
+                </div>
+                <div class="absolute right-2 bottom-24 text-right">
+                    <div class="inline"></div>
+                    <div class="inline"></div>
+
+                    <div class="inline">
+                        {{ '$' }}
+                        <span class="text-2xl">
+                            {% if stock.active %}
+                                {{ SESSION[stock.symbol].currentPrice }}
+                            {% else %}
+                                {{ stock.sellPrice }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="inline">
+                        {% if stock.active %}
+                            {{ (((SESSION[stock.symbol].currentPrice / stock.buyPrice)-1)*100)|round(2) }}
+                            {{ '%' }}
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                {% if stock.active %}
+                    <form method="post" action="/sell">
+                        <input type="hidden" name="id" value="{{ stock.id }}"/>
+                        <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/>
+                        <input type="submit"
+                               class="absolute left-2 bottom-2 bg-white hover:bg-red-500 text-black text-lg hover:text-white px-4 border border-gray-500 hover:border-black rounded-md"
+                               value="Sell"/>
+                    </form>
+                {% else %}
+                    <form method="post" action="/delete">
+                        <input type="hidden" name="id" value="{{ stock.id }}"/>
+                        <input type="submit"
+                               class="absolute left-2 bottom-2 bg-white hover:bg-red-500 text-black text-lg hover:text-white px-4 border border-gray-500 hover:border-black rounded-md"
+                               value="Delete"/>
+                    </form>
+                {% endif %}
+
+            </div>
+
         {% endfor %}
-    </table>
+    </div>
+
+
+    {# <table> #}
+    {# <tr> #}
+    {# <td colspan="10">{{ money }}</td> #}
+    {# </tr> #}
+    {# <tr> #}
+    {# <th></th> #}
+    {# <th>Active</th> #}
+    {# <th>Symbol</th> #}
+    {# <th>Name</th> #}
+    {# <th>Amount</th> #}
+    {# <th>Buy Price</th> #}
+    {# <th>Spent</th> #}
+    {# <th>Current Price</th> #}
+    {# <th>Current Value</th> #}
+    {# <th></th> #}
+    {# <th>Sell Price</th> #}
+    {# <th>Cashed</th> #}
+    {# <th>Profit</th> #}
+    {# <th></th> #}
+    {# </tr> #}
+    {# {% for stock in stocks %} #}
+    {# <tr> #}
+    {# <td><img src="{{ SESSION[stock.symbol].info.logo }}" style="height: 1.5em"></td> #}
+    {# <td>{{ stock.active }}</td> #}
+    {# <td>{{ stock.symbol }}</td> #}
+    {# <td>{{ SESSION[stock.symbol].info.name }}</td> #}
+    {# <td>{{ stock.amount }}</td> #}
+    {# <td>{{ stock.buyPrice }}</td> #}
+    {# <td>{{ stock.buyPrice*stock.amount }}</td> #}
+    {# <td>{% if stock.active %}{{ SESSION[stock.symbol].currentPrice }}{% endif %}</td> #}
+    {# <td>{% if stock.active %}{{ SESSION[stock.symbol].currentPrice * stock.amount }}{% endif %}</td> #}
+    {# <td>{% if stock.active %} #}
+    {# <form method="post" action="/sell"> #}
+    {# <input type="hidden" name="id" value="{{ stock.id }}"/> #}
+    {# <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/> #}
+    {# <input type="submit" value="Sell"/> #}
+    {# </form> #}
+    {# {% endif %} #}
+    {# </td> #}
+    {# <td>{{ stock.sellPrice }}</td> #}
+    {# <td>{{ stock.sellPrice*stock.amount }}</td> #}
+    {# <td>{{ stock.profit }}</td> #}
+    {# {% if not stock.active %} #}
+    {# <td> #}
+    {# <form method="post" action="/delete"> #}
+    {# <input type="hidden" name="id" value="{{ stock.id }}"/> #}
+    {# <input type="submit" value="Delete"/> #}
+    {# </form> #}
+    {# </td> #}
+    {# {% endif %} #}
+    {# </tr> #}
+    {# {% endfor %} #}
+    {# </table> #}
 </div>
