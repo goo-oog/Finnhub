@@ -43,11 +43,6 @@ class MySQLStocksRepository implements StocksRepository
 
     public function buyStock(string $symbol, float $amount, float $price): void
     {
-//        $this->pdo->beginTransaction();
-//        $this->pdo->exec("INSERT INTO stocks (symbol,amount,buy_price) VALUES ($symbol,$amount,$price)");
-//        $this->pdo->exec("UPDATE wallet SET money=money-(ROUND($amount*$price),2)");
-//        $this->pdo->commit();
-
         $this->pdo->prepare('INSERT INTO stocks (symbol,amount,buy_price) VALUES (?,?,?)')
             ->execute([$symbol, $amount, $price]);
         $this->pdo->prepare('UPDATE wallet SET money=money-(ROUND(?*?,2)) WHERE id=1')

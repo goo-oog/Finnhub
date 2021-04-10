@@ -10,11 +10,11 @@
             </form>
         </td>
         {% if GET.symbol is defined %}
-            {% if price.c>0 %}
-                <td><img src="{{ info.logo }}" style="height: 1.5em"></td>
+            {% if SESSION[GET.symbol].currentPrice>0 %}
+                <td><img src="{{ SESSION[GET.symbol].info.logo }}" style="height: 1.5em"></td>
                 <td>{{ GET.symbol }}</td>
-                <td>{{ info.name }}</td>
-                <td>{{ price.c }}</td>
+                <td>{{ SESSION[GET.symbol].info.name }}</td>
+                <td>{{ SESSION[GET.symbol].currentPrice }}</td>
                 <td>
                     <form method="post" action="/buy">
                         <input type="hidden" name="symbol" value="{{ GET.symbol }}">

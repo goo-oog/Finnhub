@@ -5,7 +5,6 @@ namespace App\Services;
 
 interface StockExchangeService
 {
-//    public function name(string $symbol):string;
-//    public function currentPrice(string $symbol);
-    public function query(string $type,string $symbol);
+    public function currentPrice(string $symbol);
+    public function info(string $symbol);
 }

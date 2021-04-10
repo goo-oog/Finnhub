@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection OffsetOperationsInspection */
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -11,42 +11,41 @@ use App\Services\TwigService;
 class AppController
 {
     private StockExchangeService $stockExchange;
-    private StocksRepository $stocks;
+    private StocksRepository $db;
     private TwigService $twig;
     private array $twigVariables = [];
     /**
      * @var Stock[]
      */
-    private array $myStocks = [];
+    private array $myStocks;
 
     public function __construct(StockExchangeService $stockExchange, StocksRepository $stocksRepository)
     {
         $this->stockExchange = $stockExchange;
-        $this->stocks = $stocksRepository;
+        $this->db = $stocksRepository;
         $this->twig = new TwigService();
         $this->twigVariables['GET'] = $_GET;
-        $this->myStocks = $this->stocks->getAll();
+        $this->myStocks = $this->db->getAll();
         foreach ($this->myStocks as $stock) {
-            $stock->setCurrentPrice($this->stockExchange->query('quote?symbol=', $stock->symbol())->c);
-            $companyProfile = $this->stockExchange->query('stock/profile2?symbol=', $stock->symbol());
-            $stock->setName($companyProfile->name);
-            $stock->setLogo($companyProfile->logo);
+            $symbol = $stock->symbol();
+            $_SESSION[$symbol]['currentPrice'] = $this->stockExchange->currentPrice($symbol);
+            if (!isset($_SESSION[$symbol]['info'])) {
+                $_SESSION[$symbol]['info'] = $this->stockExchange->info($symbol);
+            }
         }
     }
 
-    public function showMainPage(): string
+    public function main(): string
     {
-//        return (string)$this->stockExchange->currentPrice('AAPL');
-
         $this->twigVariables['stocks'] = $this->myStocks;
-        $this->twigVariables['money'] = $this->stocks->money();
-        if(isset($_GET['symbol'])) {
-            $this->twigVariables['price'] = $this->stockExchange->query('quote?symbol=', $_GET['symbol']);
-            $this->twigVariables['info'] = $this->stockExchange->query('stock/profile2?symbol=', $_GET['symbol']);
+        $this->twigVariables['money'] = $this->db->money();
+        if (isset($_GET['symbol'])) {
+            $_SESSION[$_GET['symbol']]['currentPrice'] = $this->stockExchange->currentPrice($_GET['symbol']);
+            if (!isset($_SESSION[$_GET['symbol']]['info'])) {
+                $_SESSION[$_GET['symbol']]['info'] = $this->stockExchange->info($_GET['symbol']);
+            }
         }
-//        $this->twigVariables['stockExchange']=$this->stockExchange;
-        //return var_export($this->stockExchange->query('quote?symbol=','AAPL'));
-//        return '';
+        $this->twigVariables['SESSION'] = $_SESSION;
         return $this->twig->environment()->render('_main-page.twig', $this->twigVariables);
 
     }
@@ -54,27 +53,32 @@ class AppController
     public function sell(): void
     {
         foreach ($this->myStocks as $stock) {
-            if ($stock->id() == $_POST['id']) {
-                $sellPrice = $stock->currentPrice();
+            if ($stock->id() === (int)$_POST['id']) {
+                $sellPrice = $_SESSION[$stock->symbol()]['currentPrice'];
             }
         }
-        $this->stocks->sellStock((int)$_POST['id'], $sellPrice);
+        $this->db->sellStock((int)$_POST['id'], $sellPrice);
         header('Location:/');
     }
 
     public function buy(): void
     {
-        $this->stocks->buyStock(
-            $_POST['symbol'],
-            (float)$_POST['amount'],
-            $this->stockExchange->query('quote?symbol=', $_POST['symbol'])->c,
-        );
-        header('Location:/');
+        if ($this->db->money() - $_SESSION[$_POST['symbol']]['currentPrice'] * (float)$_POST['amount'] >= 0) {
+            $this->db->buyStock(
+                $_POST['symbol'],
+                (float)$_POST['amount'],
+                $_SESSION[$_POST['symbol']]['currentPrice'],
+            );
+            header('Location:/');
+        } else {
+            $_SESSION['insufficientFundsMessage'] = 'Not enough money';
+            header('Location:/?symbol=' . $_POST['symbol']);
+        }
     }
 
     public function delete(): void
     {
-        $this->stocks->deleteStock((int)$_POST['id']);
+        $this->db->deleteStock((int)$_POST['id']);
         header('Location:/');
     }
 }

@@ -17,15 +17,13 @@ session_start();
 $container = new Container();
 $container->add(StockExchangeService::class, FinnhubService::class);
 $container->add(StocksRepository::class, MySQLStocksRepository::class);
-//$container->add(GetQuoteService::class)->addArgument(StockExchangeService::class);
-//$container->add(AppController::class)->addArgument(GetQuoteService::class);
 $container->add(AppController::class)->addArguments([StockExchangeService::class,StocksRepository::class]);
 
 
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->get('/', [AppController::class, 'showMainPage']);
-    $r->post('/', [AppController::class, 'showMainPage']);
+    $r->get('/', [AppController::class, 'main']);
+    $r->post('/', [AppController::class, 'main']);
     $r->post('/buy', [AppController::class, 'buy']);
     $r->post('/sell', [AppController::class, 'sell']);
     $r->post('/delete', [AppController::class, 'delete']);

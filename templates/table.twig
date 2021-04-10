@@ -22,19 +22,19 @@
         </tr>
         {% for stock in stocks %}
             <tr>
-                <td><img src="{{ stock.logo }}" style="height: 1.5em"></td>
+                <td><img src="{{ SESSION[stock.symbol].info.logo }}" style="height: 1.5em"></td>
                 <td>{{ stock.active }}</td>
                 <td>{{ stock.symbol }}</td>
-                <td>{{ stock.name }}</td>
+                <td>{{ SESSION[stock.symbol].info.name }}</td>
                 <td>{{ stock.amount }}</td>
                 <td>{{ stock.buyPrice }}</td>
                 <td>{{ stock.buyPrice*stock.amount }}</td>
-                <td>{% if stock.active %}{{ stock.currentPrice }}{% endif %}</td>
-                <td>{% if stock.active %}{{ stock.currentPrice*stock.amount }}{% endif %}</td>
+                <td>{% if stock.active %}{{ SESSION[stock.symbol].currentPrice }}{% endif %}</td>
+                <td>{% if stock.active %}{{ SESSION[stock.symbol].currentPrice * stock.amount }}{% endif %}</td>
                 <td>{% if stock.active %}
                         <form method="post" action="/sell">
                             <input type="hidden" name="id" value="{{ stock.id }}"/>
-                            <input type="hidden" name="price" value="{{ query.currentPrice(stock.symbol) }}"/>
+                            <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/>
                             <input type="submit" value="Sell"/>
                         </form>
                     {% endif %}
