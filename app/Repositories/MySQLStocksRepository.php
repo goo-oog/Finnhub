@@ -58,11 +58,14 @@ class MySQLStocksRepository implements StocksRepository
         $this->pdo->exec("UPDATE wallet SET money=money+(SELECT ROUND(amount*buy_price+profit,2) FROM stocks WHERE id=$id) WHERE id=1");
         $this->pdo->commit();
     }
-    public function deleteStock(int $id):void{
+
+    public function deleteStock(int $id): void
+    {
         $this->pdo->prepare("DELETE FROM stocks WHERE id=$id")->execute();
     }
 
-    public function money():float{
+    public function money(): float
+    {
         return $this->pdo->query('SELECT money FROM wallet WHERE id=1')->fetch()[0];
     }
 }

@@ -17,8 +17,7 @@ session_start();
 $container = new Container();
 $container->add(StockExchangeService::class, FinnhubService::class);
 $container->add(StocksRepository::class, MySQLStocksRepository::class);
-$container->add(AppController::class)->addArguments([StockExchangeService::class,StocksRepository::class]);
-
+$container->add(AppController::class)->addArguments([StockExchangeService::class, StocksRepository::class]);
 
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {

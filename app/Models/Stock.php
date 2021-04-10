@@ -54,7 +54,7 @@ class Stock
         return $this->sellPrice;
     }
 
-     public function profit(): ?float
+    public function profit(): ?float
     {
         return $this->profit;
     }

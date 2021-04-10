@@ -11,7 +11,7 @@ interface StocksRepository
 
     public function sellStock(int $id, float $price): void;
 
-    public function deleteStock(int $id):void;
+    public function deleteStock(int $id): void;
 
-    public function money():float;
+    public function money(): float;
 }
