@@ -1,72 +1,99 @@
 <br>
-<div>
-    <div class="border-4 border-4 border-gray-400 rounded-xl bg-gray-200 p-10 text-center">
-        {% for stock in stocks %}
+{# <div> #}
+<div class="border-2 border-gray-400 rounded-xl bg-gray-700 p-4 text-center">
+    {% for stock in stocks %}
 
-            <div class="inline-block w-80 h-60 relative border-2 rounded-xl bg-gradient-to-b
+        <div class="inline-flex w-80 h-52 relative border-2 rounded-xl bg-gradient-to-b
             {% if stock.active %}
                 {% if SESSION[stock.symbol].currentPrice >= stock.buyPrice %}
-                    border-green-700 from-green-500 to-gray-900 text-green-100
+                    border-green-700 from-green-800 to-gray-900 text-green-100
                 {% else %}
-                    border-red-700 from-red-500 to-gray-900 text-red-100
+                    border-red-700 from-red-800 to-gray-900 text-red-100
                 {% endif %}
             {% else %}
-                border-gray-700 from-gray-400 to-gray-700 text-gray-200
+                border-gray-400 from-gray-500 to-gray-700 text-gray-200
             {% endif %}
             ">
 
-                <img src="{{ SESSION[stock.symbol].info.logo }}" class="absolute left-2 top-2 w-16">
-                <div class="absolute right-2 top-2 text-right">
-                    <span class="block font-bold text-4xl">{{ stock.symbol }}</span>
-                    <span class="block">{{ SESSION[stock.symbol].info.name }}</span>
-                </div>
-                <div class="absolute right-2 bottom-24 text-right">
-                    <div class="inline"></div>
-                    <div class="inline"></div>
-
-                    <div class="inline">
-                        {{ '$' }}
-                        <span class="text-2xl">
-                            {% if stock.active %}
-                                {{ SESSION[stock.symbol].currentPrice }}
-                            {% else %}
-                                {{ stock.sellPrice }}
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div class="inline">
-                        {% if stock.active %}
-                            {{ (((SESSION[stock.symbol].currentPrice / stock.buyPrice)-1)*100)|round(2) }}
-                            {{ '%' }}
-                        {% endif %}
-                    </div>
-
-                </div>
-
-                {% if stock.active %}
-                    <form method="post" action="/sell">
-                        <input type="hidden" name="id" value="{{ stock.id }}"/>
-                        <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/>
-                        <input type="submit"
-                               class="absolute left-2 bottom-2 bg-white hover:bg-red-500 text-black text-lg hover:text-white px-4 border border-gray-500 hover:border-black rounded-md"
-                               value="Sell"/>
-                    </form>
-                {% else %}
-                    <form method="post" action="/delete">
-                        <input type="hidden" name="id" value="{{ stock.id }}"/>
-                        <input type="submit"
-                               class="absolute left-2 bottom-2 bg-white hover:bg-red-500 text-black text-lg hover:text-white px-4 border border-gray-500 hover:border-black rounded-md"
-                               value="Delete"/>
-                    </form>
-                {% endif %}
-
+            <img src="{{ SESSION[stock.symbol].info.logo }}" class="absolute left-2 top-2 w-16">
+            <div class="absolute right-2 top-2 text-right">
+                <span class="block font-bold text-4xl">{{ stock.symbol }}</span>
+                <span class="block">{{ SESSION[stock.symbol].info.name }}</span>
             </div>
+            <div class="absolute right-2 top-24 text-right">
+                <div class="inline">
+                    {% if stock.active %}
+                        {{ 'Current: $' }}{{ SESSION[stock.symbol].currentPrice }}
+                    {% else %}
+                        {{ 'Sold: $' }}{{ stock.sellPrice }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="absolute right-2 top-32 text-right">
+                <div class="inline">
+                    {% if stock.active %}
+                        {{ 'Value: $' }}{{ (SESSION[stock.symbol].currentPrice * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
+                    {% else %}
+                        {{ 'Value: $' }}{{ (stock.sellPrice * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="absolute right-2 bottom-2 text-right">
+                <div class="inline">
+                    {% if stock.active %}
+                        {{ 'Profit: $' }}
+                        <span class="text-4xl">
+                            {{ ((SESSION[stock.symbol].currentPrice-stock.buyPrice) * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
+                        </span>
+                    {% else %}
+                        {{ 'Profit: $' }}
+                        <span class="text-4xl">
+                            {{ stock.profit|format_number({fraction_digit: 2},locale='en') }}
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="inline">
+                    {% if stock.active %}
+                        {{ ((SESSION[stock.symbol].currentPrice / stock.buyPrice-1)*100)|format_number({fraction_digit: 1},locale='en') }}{{ '%' }}
+                    {% else %}
+                        {{ ((stock.sellPrice/stock.buyPrice-1)*100)|format_number({fraction_digit: 1},locale='en') }}{{ '%' }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="absolute left-2 top-24 text-left">
+                <div class="inline">
+                    {{ 'Bought: $' }}{{ stock.buyPrice }}
+                </div>
+            </div>
+            <div class="absolute left-2 top-32 text-left">
+                <div class="inline">
+                    {{ 'Amount: ' }}{{ stock.amount|format_number({fraction_digit: 2},locale='en') }}
+                </div>
+            </div>
+            {% if stock.active %}
+                <form method="post" action="/sell">
+                    <input type="hidden" name="id" value="{{ stock.id }}"/>
+                    <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/>
+                    <input type="submit"
+                           class="absolute left-2 bottom-2 bg-gradient-to-b from-gray-200 via-gray-400 to-gray-200 text-black text-lg hover:text-white px-4 rounded-md"
+                           value="Sell"/>
+                </form>
+            {% else %}
+                <form method="post" action="/delete">
+                    <input type="hidden" name="id" value="{{ stock.id }}"/>
+                    <input type="submit"
+                           class="absolute left-2 bottom-2 bg-gradient-to-b from-gray-200 via-gray-400 to-gray-200 text-black text-lg hover:text-white px-4 rounded-md"
+                           value="Delete"/>
+                </form>
+            {% endif %}
 
-        {% endfor %}
-    </div>
+        </div>
+
+    {% endfor %}
+</div>
 
 
-    {# <table> #}
+{# <table> #}
     {# <tr> #}
     {# <td colspan="10">{{ money }}</td> #}
     {# </tr> #}
@@ -119,4 +146,4 @@
     {# </tr> #}
     {# {% endfor %} #}
     {# </table> #}
-</div>
+{# </div>   #}

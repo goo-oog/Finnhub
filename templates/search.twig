@@ -1,30 +1,101 @@
 <br>
-<table>
-    <tr>
-        <td>
+<div class="border-2 border-gray-400 rounded-xl bg-gray-700 p-4 text-white align-baseline">
+    <div class="flex flex-wrap space-x-12">
+        <div class="inline-flex">
             <form method="get" action="/">
-                <label for="search">Search for stock:</label>
-                <input type="search" id="search" oninput="this.value = this.value.toUpperCase()" name="symbol" required
-                       maxlength="5">
-                <input type="submit" value="Search">
+                <label for="search" class="text-2xl">Search for stock:</label>
+                <input type="search"
+                       class="text-center text-black h-10 w-24 text-xl ml-2 border-2 border-gray-500 rounded-md"
+                       id="search" oninput="this.value = this.value.toUpperCase()" name="symbol" required
+                       maxlength="4">
+                <input type="submit"
+                       class="content-center bg-white h-10 w-24 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md"
+                       value="Search">
             </form>
-        </td>
+        </div>
         {% if GET.symbol is defined %}
             {% if SESSION[GET.symbol].currentPrice>0 %}
-                <td><img src="{{ SESSION[GET.symbol].info.logo }}" style="height: 1.5em"></td>
-                <td>{{ GET.symbol }}</td>
-                <td>{{ SESSION[GET.symbol].info.name }}</td>
-                <td>{{ SESSION[GET.symbol].currentPrice }}</td>
-                <td>
+                <div class="inline-flex space-x-2">
+                    <div><img src="{{ SESSION[GET.symbol].info.logo }}" class="h-10">
+                    </div>
+                    <div class="text-2xl font-bold">{{ GET.symbol }}</div>
+                    <div class="text-2xl text-gray-400">{{ SESSION[GET.symbol].info.name }}</div>
+                    <div class="text-lg">{{ '$ ' }}
+                        <span class="text-2xl font-bold">{{ SESSION[GET.symbol].currentPrice }}</span></div>
+                </div>
+                <div class="inline-flex space-x-2">
                     <form method="post" action="/buy">
                         <input type="hidden" name="symbol" value="{{ GET.symbol }}">
-                        <input type="number" name="amount" value="1">
-                        <input type="submit" value="Buy">
+                        <input type="hidden" name="buy-method" value="count">
+                        <label for="buy" class="text-2xl">Count of stocks:</label>
+                        <input type="text" id="buy"
+                               class="text-center text-black h-10 w-24 text-xl ml-2 border-2 border-gray-500 rounded-md"
+                               name="amount" value="1" pattern="^[0-9]+[\.]?[0-9]*$">
+                        <input type="submit"
+                               class="content-center bg-white h-10 w-24 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md"
+                               value="Buy">
                     </form>
-                </td>
+                </div>
+                <div class="inline-flex space-x-2">
+                    <form method="post" action="/buy">
+                        <input type="hidden" name="symbol" value="{{ GET.symbol }}">
+                        <input type="hidden" name="buy-method" value="money">
+                        <label for="buy-m" class="text-2xl">Money amount:</label>
+                        <input type="text" id="buy-m"
+                               class="text-center text-black h-10 w-24 text-xl ml-2 border-2 border-gray-500 rounded-md"
+                               name="money" value="1" pattern="^[0-9]+[\.]?[0-9]*$">
+                        {{ ' $ ' }}
+                        <input type="submit"
+                               class="content-center bg-white h-10 w-24 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md"
+                               value="Buy">
+                    </form>
+                </div>
             {% else %}
-                <td>Stock with symbol "{{ GET.symbol }}" not found</td>
+                <div class="inline-flex text-2xl text-yellow-300">Stock with symbol "{{ GET.symbol }}" not found</div>
             {% endif %}
         {% endif %}
-    </tr>
-</table>
+    </div>
+</div>
+
+
+{# <br> #}
+{# <div class="border-2 border-gray-400 rounded-xl bg-gray-700 p-4 text-center text-white align-baseline"> #}
+{# <table> #}
+{# <tr> #}
+{# <td> #}
+{# <form method="get" action="/"> #}
+{# <label for="search" class="text-2xl">Search for stock:</label> #}
+{# <input type="search" #}
+{# class="text-center text-black h-8 w-20 text-xl ml-4 border-2 border-gray-500 rounded-md" #}
+{# id="search" oninput="this.value = this.value.toUpperCase()" name="symbol" required #}
+{# maxlength="4"> #}
+{# <input type="submit" #}
+{# class="content-center bg-white h-8 w-20 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md" #}
+{# value="Search"> #}
+{# </form> #}
+{# </td> #}
+{# {% if GET.symbol is defined %} #}
+{# {% if SESSION[GET.symbol].currentPrice>0 %} #}
+{# <td><img src="{{ SESSION[GET.symbol].info.logo }}" class="h-8"></td> #}
+{# <td class="text-2xl align-bottom">{{ GET.symbol }}</td> #}
+{# <td class="text-lg align-bottom">{{ SESSION[GET.symbol].info.name }}</td> #}
+{# <td class="text-2xl align-bottom">{{ '$' }} #}
+{# <span class="text-2xl">{{ SESSION[GET.symbol].currentPrice }}</span></td> #}
+{# <td> #}
+{# <form method="post" action="/buy"> #}
+{# <input type="hidden" name="symbol" value="{{ GET.symbol }}"> #}
+{# <input type="text" #}
+{# class="text-center text-black h-8 w-20 text-xl ml-4 border-2 border-gray-500 rounded-md" #}
+{# name="amount" value="1" pattern="^[0-9]+[\.]?[0-9]*$"> #}
+{# <input type="submit" #}
+{# class="content-center bg-white h-8 w-20 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md" #}
+{# value="Buy"> #}
+{# </form> #}
+{# </td> #}
+{# {% else %} #}
+{# <td>Stock with symbol "{{ GET.symbol }}" not found</td> #}
+{# {% endif %} #}
+{# {% endif %} #}
+{# </tr> #}
+{# </table> #}
+{# </div>  #}

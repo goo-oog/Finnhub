@@ -63,7 +63,10 @@ class AppController
 
     public function buy(): void
     {
-        if ($this->db->money() - $_SESSION[$_POST['symbol']]['currentPrice'] * (float)$_POST['amount'] >= 0) {
+        if ($_POST['buy-method'] === 'money') {
+            $_POST['amount'] = $_POST['money'] / $_SESSION[$_POST['symbol']]['currentPrice'];
+        }
+        if ((float)$_POST['amount'] > 0 && $this->db->money() - $_SESSION[$_POST['symbol']]['currentPrice'] * (float)$_POST['amount'] >= 0) {
             $this->db->buyStock(
                 $_POST['symbol'],
                 (float)$_POST['amount'],
