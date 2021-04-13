@@ -1,101 +1,42 @@
-<br>
-<div class="border-2 border-gray-400 rounded-xl bg-gray-700 p-4 text-white align-baseline">
-    <div class="flex flex-wrap space-x-12">
-        <div class="inline-flex">
-            <form method="get" action="/">
-                <label for="search" class="text-2xl">Search for stock:</label>
-                <input type="search"
-                       class="text-center text-black h-10 w-24 text-xl ml-2 border-2 border-gray-500 rounded-md"
-                       id="search" oninput="this.value = this.value.toUpperCase()" name="symbol" required
-                       maxlength="4">
-                <input type="submit"
-                       class="content-center bg-white h-10 w-24 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md"
-                       value="Search">
+<div class="section flex flex-wrap justify-evenly content-evenly items-end m-4 text-xl">
+    <form method="get" action="/" class="inline-flex flex-nowrap justify-center items-center">
+        <label for="search">Search for stock:</label>
+        <input type="search" class="text-input ml-2" id="search" maxlength="4" name="symbol" required
+               oninput="this.value = this.value.toUpperCase()">
+        <input type="submit" class="button" value="Search">
+    </form>
+    {% if GET.symbol is defined %}
+        {% if SESSION[GET.symbol].currentPrice>0 %}
+            <div class="inline-flex flex-nowrap justify-center items-center space-x-2">
+                <img src="{{ SESSION[GET.symbol].info.logo }}" class="h-8">
+                <span class="font-bold">{{ GET.symbol }}</span>
+                <span class="text-gray-400">{{ SESSION[GET.symbol].info.name }}</span>
+                <span class="text-base">{{ '$ ' }}</span>
+                <span class="font-bold">
+                    {{ SESSION[GET.symbol].currentPrice|format_number({fraction_digit: 2},locale='en') }}
+                </span>
+            </div>
+            <form method="post" action="/buy" class="inline-flex flex-nowrap text-xs items-end">
+                <input type="hidden" name="symbol" value="{{ GET.symbol }}">
+                <input type="hidden" name="buy-method" value="count">
+                <div>
+                    <label for="buy">Count</label><br>
+                    <input type="text" id="buy" class="text-input" name="amount" pattern="^[0-9]+[\.]?[0-9]*$"
+                           oninput="document.getElementById('buy-m').value='$'+Math.round(this.value*{{ SESSION[GET.symbol].currentPrice }}*100)/100;
+                                   document.getElementById('buy-button').disabled=
+                                   document.getElementById('buy-m').value.substr(1)<=0 ||
+                                   document.getElementById('buy-m').value.substr(1)>{{ money }}">
+                </div>
+                <div class="ml-2">
+                    <label for="buy-m">Money</label><br>
+                    <input type="text" id="buy-m" class="text-input" name="money" pattern="^[\$]?[0-9]+[\.]?[0-9]*$"
+                           oninput="this.value=this.value[0]==='$'?this.value:'$'+this.value;
+                                   document.getElementById('buy').value=Math.round(this.value.substr(1)*10000/{{ SESSION[GET.symbol].currentPrice }})/10000">
+                </div>
+                <input type="submit" id="buy-button" class="button h-7" value="Buy">
             </form>
-        </div>
-        {% if GET.symbol is defined %}
-            {% if SESSION[GET.symbol].currentPrice>0 %}
-                <div class="inline-flex space-x-2">
-                    <div><img src="{{ SESSION[GET.symbol].info.logo }}" class="h-10">
-                    </div>
-                    <div class="text-2xl font-bold">{{ GET.symbol }}</div>
-                    <div class="text-2xl text-gray-400">{{ SESSION[GET.symbol].info.name }}</div>
-                    <div class="text-lg">{{ '$ ' }}
-                        <span class="text-2xl font-bold">{{ SESSION[GET.symbol].currentPrice }}</span></div>
-                </div>
-                <div class="inline-flex space-x-2">
-                    <form method="post" action="/buy">
-                        <input type="hidden" name="symbol" value="{{ GET.symbol }}">
-                        <input type="hidden" name="buy-method" value="count">
-                        <label for="buy" class="text-2xl">Count of stocks:</label>
-                        <input type="text" id="buy"
-                               class="text-center text-black h-10 w-24 text-xl ml-2 border-2 border-gray-500 rounded-md"
-                               name="amount" value="1" pattern="^[0-9]+[\.]?[0-9]*$">
-                        <input type="submit"
-                               class="content-center bg-white h-10 w-24 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md"
-                               value="Buy">
-                    </form>
-                </div>
-                <div class="inline-flex space-x-2">
-                    <form method="post" action="/buy">
-                        <input type="hidden" name="symbol" value="{{ GET.symbol }}">
-                        <input type="hidden" name="buy-method" value="money">
-                        <label for="buy-m" class="text-2xl">Money amount:</label>
-                        <input type="text" id="buy-m"
-                               class="text-center text-black h-10 w-24 text-xl ml-2 border-2 border-gray-500 rounded-md"
-                               name="money" value="1" pattern="^[0-9]+[\.]?[0-9]*$">
-                        {{ ' $ ' }}
-                        <input type="submit"
-                               class="content-center bg-white h-10 w-24 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md"
-                               value="Buy">
-                    </form>
-                </div>
-            {% else %}
-                <div class="inline-flex text-2xl text-yellow-300">Stock with symbol "{{ GET.symbol }}" not found</div>
-            {% endif %}
+        {% else %}
+            <div class="inline-flex text-yellow-300">Stock with symbol "{{ GET.symbol }}" was not found</div>
         {% endif %}
-    </div>
+    {% endif %}
 </div>
-
-
-{# <br> #}
-{# <div class="border-2 border-gray-400 rounded-xl bg-gray-700 p-4 text-center text-white align-baseline"> #}
-{# <table> #}
-{# <tr> #}
-{# <td> #}
-{# <form method="get" action="/"> #}
-{# <label for="search" class="text-2xl">Search for stock:</label> #}
-{# <input type="search" #}
-{# class="text-center text-black h-8 w-20 text-xl ml-4 border-2 border-gray-500 rounded-md" #}
-{# id="search" oninput="this.value = this.value.toUpperCase()" name="symbol" required #}
-{# maxlength="4"> #}
-{# <input type="submit" #}
-{# class="content-center bg-white h-8 w-20 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md" #}
-{# value="Search"> #}
-{# </form> #}
-{# </td> #}
-{# {% if GET.symbol is defined %} #}
-{# {% if SESSION[GET.symbol].currentPrice>0 %} #}
-{# <td><img src="{{ SESSION[GET.symbol].info.logo }}" class="h-8"></td> #}
-{# <td class="text-2xl align-bottom">{{ GET.symbol }}</td> #}
-{# <td class="text-lg align-bottom">{{ SESSION[GET.symbol].info.name }}</td> #}
-{# <td class="text-2xl align-bottom">{{ '$' }} #}
-{# <span class="text-2xl">{{ SESSION[GET.symbol].currentPrice }}</span></td> #}
-{# <td> #}
-{# <form method="post" action="/buy"> #}
-{# <input type="hidden" name="symbol" value="{{ GET.symbol }}"> #}
-{# <input type="text" #}
-{# class="text-center text-black h-8 w-20 text-xl ml-4 border-2 border-gray-500 rounded-md" #}
-{# name="amount" value="1" pattern="^[0-9]+[\.]?[0-9]*$"> #}
-{# <input type="submit" #}
-{# class="content-center bg-white h-8 w-20 hover:bg-red-500 text-black text-xl hover:text-white border-2 border-gray-500 hover:border-black rounded-md" #}
-{# value="Buy"> #}
-{# </form> #}
-{# </td> #}
-{# {% else %} #}
-{# <td>Stock with symbol "{{ GET.symbol }}" not found</td> #}
-{# {% endif %} #}
-{# {% endif %} #}
-{# </tr> #}
-{# </table> #}
-{# </div>  #}

@@ -13,7 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build-css": "tailwindcss build src/styles.css -o public/styles.css"
+    "build-css": "tailwindcss build templates/style.css -o public/style.css"
   },
   "author": "",
   "license": "ISC"

@@ -38,11 +38,11 @@ $uri = rawurldecode($uri);
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        echo (new NotFoundController())->index();
+        (new NotFoundController())->index();
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
-        echo (new NotFoundController())->index();
+        (new NotFoundController())->index();
         break;
     case FastRoute\Dispatcher::FOUND:
         [$class, $method] = $routeInfo[1];

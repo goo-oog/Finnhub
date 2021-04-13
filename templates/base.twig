@@ -3,32 +3,15 @@
 <head>
     <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="text/html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="shortcut icon" type="image/png" href="finnhub.png"/>
     <title>Finnhub</title>
 </head>
-<body class="bg-gray-700">
+<body class="bg-gray-700 text-white">
 <div class="container w-max mx-auto">
-    <div class="relative">
-        <div class="inline-flex space-x-2 my-6">
-            <div class="flex-1"><img src="finnhub.png" class="w-16"></div>
-            <div class="flex-1 text-white text-4xl"> Finnhub</div>
-        </div>
-
-
-        <div class="absolute right-0 top-0 text-right">
-            <div class="inline-flex space-x-2 my-6">
-                <div class="flex-1 text-white text-4xl">
-                    <span class="text-2xl">{{ '$ ' }}</span>
-                    {{ money|format_number({fraction_digit: 2},locale='en') }}
-                </div>
-            </div>
-        </div>
-
-        {% block search %}{% endblock %}
-        {% block main %}{% endblock %}
-        {% block button %}{% endblock %}
-    </div>
+    {% block header %}{% endblock %}
+    {% block search %}{% endblock %}
+    {% block main %}{% endblock %}
 </div>
 </body>
 </html>

@@ -47,7 +47,6 @@ class AppController
         }
         $this->twigVariables['SESSION'] = $_SESSION;
         return $this->twig->environment()->render('_main-page.twig', $this->twigVariables);
-
     }
 
     public function sell(): void
@@ -63,9 +62,6 @@ class AppController
 
     public function buy(): void
     {
-        if ($_POST['buy-method'] === 'money') {
-            $_POST['amount'] = $_POST['money'] / $_SESSION[$_POST['symbol']]['currentPrice'];
-        }
         if ((float)$_POST['amount'] > 0 && $this->db->money() - $_SESSION[$_POST['symbol']]['currentPrice'] * (float)$_POST['amount'] >= 0) {
             $this->db->buyStock(
                 $_POST['symbol'],
@@ -74,7 +70,6 @@ class AppController
             );
             header('Location:/');
         } else {
-            $_SESSION['insufficientFundsMessage'] = 'Not enough money';
             header('Location:/?symbol=' . $_POST['symbol']);
         }
     }

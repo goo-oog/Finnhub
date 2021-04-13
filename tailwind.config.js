@@ -1,7 +1,7 @@
 module.exports = {
     purge: [
         './templates/*.twig',
-        './src/*.css',
+        './templates/*.css',
     ],
     darkMode: false,
     theme: {

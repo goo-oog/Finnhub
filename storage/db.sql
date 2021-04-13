@@ -33,7 +33,7 @@ CREATE TABLE `stocks`
     `profit`     float               DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 35
+  AUTO_INCREMENT = 38
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_as_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -49,7 +49,10 @@ INSERT INTO `stocks`
 VALUES (31, 0, 'AZN', 1, 49.94, 49.94, 0),
        (32, 1, 'PYPL', 1, 265, NULL, NULL),
        (33, 1, 'TSLA', 1, 679, NULL, NULL),
-       (34, 1, 'BP', 1, 24.39, NULL, NULL);
+       (34, 1, 'BP', 1, 24.39, NULL, NULL),
+       (35, 1, 'HD', 0.256116, 319.23, NULL, NULL),
+       (36, 1, 'XPEV', 2.89939, 34.49, NULL, NULL),
+       (37, 1, 'AAPL', 1.5239, 131.24, NULL, NULL);
 /*!40000 ALTER TABLE `stocks`
     ENABLE KEYS */;
 UNLOCK TABLES;
@@ -79,7 +82,7 @@ LOCK TABLES `wallet` WRITE;
 /*!40000 ALTER TABLE `wallet`
     DISABLE KEYS */;
 INSERT INTO `wallet`
-VALUES (1, 81.76);
+VALUES (1, 700);
 /*!40000 ALTER TABLE `wallet`
     ENABLE KEYS */;
 UNLOCK TABLES;
@@ -93,4 +96,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-10 15:54:10
+-- Dump completed on 2021-04-13 13:03:29
