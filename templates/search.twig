@@ -18,7 +18,6 @@
             </div>
             <form method="post" action="/buy" class="inline-flex flex-nowrap text-xs items-end">
                 <input type="hidden" name="symbol" value="{{ GET.symbol }}">
-                <input type="hidden" name="buy-method" value="count">
                 <div>
                     <label for="buy">Count</label><br>
                     <input type="text" id="buy" class="text-input" name="amount" pattern="^[0-9]+[\.]?[0-9]*$"
