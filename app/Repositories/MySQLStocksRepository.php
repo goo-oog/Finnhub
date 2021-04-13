@@ -32,6 +32,9 @@ class MySQLStocksRepository implements StocksRepository
         }
     }
 
+    /**
+     * @return Stock[]
+     */
     public function getAll(): array
     {
         $stocks = [];

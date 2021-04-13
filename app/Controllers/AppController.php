@@ -49,17 +49,6 @@ class AppController
         return $this->twig->environment()->render('_main-page.twig', $this->twigVariables);
     }
 
-    public function sell(): void
-    {
-        foreach ($this->myStocks as $stock) {
-            if ($stock->id() === (int)$_POST['id']) {
-                $sellPrice = $_SESSION[$stock->symbol()]['currentPrice'];
-            }
-        }
-        $this->db->sellStock((int)$_POST['id'], $sellPrice);
-        header('Location:/');
-    }
-
     public function buy(): void
     {
         if ((float)$_POST['amount'] > 0 && $this->db->money() - $_SESSION[$_POST['symbol']]['currentPrice'] * (float)$_POST['amount'] >= 0) {
@@ -72,6 +61,17 @@ class AppController
         } else {
             header('Location:/?symbol=' . $_POST['symbol']);
         }
+    }
+
+    public function sell(): void
+    {
+        foreach ($this->myStocks as $stock) {
+            if ($stock->id() === (int)$_POST['id']) {
+                $sellPrice = $_SESSION[$stock->symbol()]['currentPrice'];
+            }
+        }
+        $this->db->sellStock((int)$_POST['id'], $sellPrice);
+        header('Location:/');
     }
 
     public function delete(): void

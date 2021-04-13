@@ -8,7 +8,7 @@
     {% if GET.symbol is defined %}
         {% if SESSION[GET.symbol].currentPrice>0 %}
             <div class="inline-flex flex-nowrap justify-center items-center space-x-2">
-                <img src="{{ SESSION[GET.symbol].info.logo }}" class="h-8">
+                <img src="{{ SESSION[GET.symbol].info.logo }}" alt="Logo" class="h-8">
                 <span class="font-bold">{{ GET.symbol }}</span>
                 <span class="text-gray-400">{{ SESSION[GET.symbol].info.name }}</span>
                 <span class="text-base">{{ '$ ' }}</span>
