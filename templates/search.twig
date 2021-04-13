@@ -1,6 +1,6 @@
-<div class="section flex flex-wrap justify-evenly content-evenly items-end m-4 text-xl">
+<div class="section flex flex-wrap justify-evenly content-evenly items-end m-4 sm:text-xl xs:text-lg">
     <form method="get" action="/" class="inline-flex flex-nowrap justify-center items-center">
-        <label for="search">Search for stock:</label>
+        <label for="search" class="whitespace-nowrap">Search for stock:</label>
         <input type="search" class="text-input ml-2" id="search" maxlength="4" name="symbol" required
                oninput="this.value = this.value.toUpperCase()">
         <input type="submit" class="button" value="Search">
@@ -36,7 +36,7 @@
                 <input type="submit" id="buy-button" class="button h-7" value="Buy">
             </form>
         {% else %}
-            <div class="inline-flex text-yellow-300">Stock with symbol "{{ GET.symbol }}" was not found</div>
+            <div class="inline-flex text-yellow-300 justify-center">Stock with symbol "{{ GET.symbol }}" not found</div>
         {% endif %}
     {% endif %}
 </div>

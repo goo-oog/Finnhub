@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .section {
-    @apply border-2 border-gray-400 rounded-xl bg-gray-700 p-4
+    @apply border-2 border-gray-400 rounded-xl bg-gray-700 sm:p-4 xs:p-2
 }
 
 .button {

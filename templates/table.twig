@@ -1,6 +1,6 @@
 <div class="section m-4 text-center">
     {% for stock in stocks %}
-        <div class="inline-flex w-80 h-52 relative border-2 rounded-xl bg-gradient-to-b
+        <div class="inline-flex w-76 h-50 relative border-2 rounded-xl bg-gradient-to-b
             {% if stock.active %}
                 {% if SESSION[stock.symbol].currentPrice >= stock.buyPrice %}
                     border-green-700 from-green-800 to-gray-900 text-green-100
@@ -17,20 +17,20 @@
                 <span class="block font-bold text-4xl">{{ stock.symbol }}</span>
                 <span class="block">{{ SESSION[stock.symbol].info.name }}</span>
             </div>
-            <div class="absolute inline left-2 top-24 text-left">
+            <div class="absolute inline left-2 top-22 text-left">
                 {{ 'Bought: $' }}{{ stock.buyPrice }}
             </div>
-            <div class="absolute inline left-2 top-32 text-left">
+            <div class="absolute inline left-2 top-28 text-left">
                 {{ 'Amount: ' }}{{ stock.amount|format_number({fraction_digit: 2},locale='en') }}
             </div>
-            <div class="absolute inline right-2 top-24 text-right">
+            <div class="absolute inline right-2 top-22 text-right">
                 {% if stock.active %}
                     {{ 'Current: $' }}{{ SESSION[stock.symbol].currentPrice }}
                 {% else %}
                     {{ 'Sold: $' }}{{ stock.sellPrice }}
                 {% endif %}
             </div>
-            <div class="absolute inline right-2 top-32 text-right">
+            <div class="absolute inline right-2 top-28 text-right">
                 {% if stock.active %}
                     {{ 'Value: $' }}{{ (SESSION[stock.symbol].currentPrice * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
                 {% else %}

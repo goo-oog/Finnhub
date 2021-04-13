@@ -1,10 +1,10 @@
 <div class="flex justify-between items-center m-4">
     <div class="inline-flex space-x-2">
         <img src="finnhub.png" alt="Finnhub" class="w-16">
-        <span class="text-4xl"> Finnhub</span>
+        <span class="sm:text-4xl xs:text-3xl">Finnhub</span>
     </div>
-    <div class="section inline-flex space-x-2 text-right">
-        <span class="text-2xl">{{ '$ ' }}</span>
-        <span class="text-4xl">{{ money|format_number({fraction_digit: 2},locale='en') }}</span>
+    <div class="section inline-flex items-end space-x-2 text-right">
+        <span class="sm:text-2xl xs:text-xl">{{ '$ ' }}</span>
+        <span class="sm:text-4xl xs:text-3xl">{{ money|format_number({fraction_digit: 2},locale='en') }}</span>
     </div>
 </div>
