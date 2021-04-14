@@ -8,7 +8,8 @@
     "vlucas/phpdotenv": "^5.3",
     "twig/twig": "^3.3",
     "ext-json": "*",
-    "twig/intl-extra": "^3.3"
+    "twig/intl-extra": "^3.3",
+    "doctrine/cache": "^1.10"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

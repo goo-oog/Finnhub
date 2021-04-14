@@ -2,7 +2,7 @@
     {% for stock in stocks %}
         <div class="inline-flex w-76 h-50 relative border-2 rounded-xl bg-gradient-to-b
             {% if stock.active %}
-                {% if SESSION[stock.symbol].currentPrice >= stock.buyPrice %}
+                {% if stockExchange.currentPrice(stock.symbol) >= stock.buyPrice %}
                     border-green-700 from-green-800 to-gray-900 text-green-100
                 {% else %}
                     border-red-700 from-red-800 to-gray-900 text-red-100
@@ -12,10 +12,10 @@
             {% endif %}
             ">
 
-            <img src="{{ SESSION[stock.symbol].info.logo }}" class="absolute left-2 top-2 w-16">
+            <img src="{{ stockExchange.info(stock.symbol).logo }}" class="absolute left-2 top-2 w-16">
             <div class="absolute right-2 top-2 text-right">
                 <span class="block font-bold text-4xl">{{ stock.symbol }}</span>
-                <span class="block">{{ SESSION[stock.symbol].info.name }}</span>
+                <span class="block">{{ stockExchange.info(stock.symbol).name }}</span>
             </div>
             <div class="absolute inline left-2 top-22 text-left">
                 {{ 'Bought: $' }}{{ stock.buyPrice }}
@@ -25,14 +25,14 @@
             </div>
             <div class="absolute inline right-2 top-22 text-right">
                 {% if stock.active %}
-                    {{ 'Current: $' }}{{ SESSION[stock.symbol].currentPrice|format_number({fraction_digit: 2},locale='en') }}
+                    {{ 'Current: $' }}{{ stockExchange.currentPrice(stock.symbol)|format_number({fraction_digit: 2},locale='en') }}
                 {% else %}
                     {{ 'Sold: $' }}{{ stock.sellPrice|format_number({fraction_digit: 2},locale='en') }}
                 {% endif %}
             </div>
             <div class="absolute inline right-2 top-28 text-right">
                 {% if stock.active %}
-                    {{ 'Value: $' }}{{ (SESSION[stock.symbol].currentPrice * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
+                    {{ 'Value: $' }}{{ (stockExchange.currentPrice(stock.symbol) * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
                 {% else %}
                     {{ 'Value: $' }}{{ (stock.sellPrice * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
                 {% endif %}
@@ -41,9 +41,9 @@
                 {% if stock.active %}
                     {{ 'Profit: $' }}
                     <span class="text-4xl">
-                        {{ ((SESSION[stock.symbol].currentPrice-stock.buyPrice) * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
+                        {{ ((stockExchange.currentPrice(stock.symbol)-stock.buyPrice) * stock.amount)|format_number({fraction_digit: 2},locale='en') }}
                     </span>
-                    {{ ((SESSION[stock.symbol].currentPrice / stock.buyPrice-1)*100)|format_number({fraction_digit: 1},locale='en') }}{{ '%' }}
+                    {{ ((stockExchange.currentPrice(stock.symbol) / stock.buyPrice-1)*100)|format_number({fraction_digit: 1},locale='en') }}{{ '%' }}
                 {% else %}
                     {{ 'Profit: $' }}
                     <span class="text-4xl">
@@ -55,7 +55,7 @@
             {% if stock.active %}
                 <form method="post" action="/sell">
                     <input type="hidden" name="id" value="{{ stock.id }}"/>
-                    <input type="hidden" name="price" value="{{ SESSION[stock.symbol].currentPrice }}"/>
+                    <input type="hidden" name="price" value="{{ stockExchange.currentPrice(stock.symbol) }}"/>
                     <input type="submit" class="button absolute left-2 bottom-2" value="Sell"/>
                 </form>
             {% else %}

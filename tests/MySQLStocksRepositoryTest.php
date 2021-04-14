@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Models\Stock;
-use App\Repositories\MySQLStocksRepository;
+use App\Repositories\MySQLStockRepository;
 use PHPUnit\Framework\TestCase;
 
 class MySQLStocksRepositoryTest extends TestCase
@@ -12,13 +12,13 @@ class MySQLStocksRepositoryTest extends TestCase
 
     public function testGetAll()
     {
-        $db = new MySQLStocksRepository();
+        $db = new MySQLStockRepository();
         self::assertInstanceOf(Stock::class, $db->getAll()[0]);
     }
 
     public function testBuyStock()
     {
-        $db = new MySQLStocksRepository();
+        $db = new MySQLStockRepository();
         $db->buyStock('BUY', 1.1, 2.2);
         self::assertEquals('BUY', $db->getAll()[0]->symbol());
         self::assertEquals(1.1, $db->getAll()[0]->amount());
@@ -29,7 +29,7 @@ class MySQLStocksRepositoryTest extends TestCase
 
     public function testSellStock()
     {
-        $db = new MySQLStocksRepository();
+        $db = new MySQLStockRepository();
         $db->buyStock('SELL', 3.3, 4.4);
         $id = $db->getAll()[0]->id();
         $db->sellStock($id, 5.5);
@@ -48,7 +48,7 @@ class MySQLStocksRepositoryTest extends TestCase
 
     public function testDeleteStock()
     {
-        $db = new MySQLStocksRepository();
+        $db = new MySQLStockRepository();
         $db->buyStock('DELETE', 6.6, 7.7);
         $id = $db->getAll()[0]->id();
         $db->sellStock($id, 8.8);
@@ -64,7 +64,7 @@ class MySQLStocksRepositoryTest extends TestCase
 
     public function testMoney()
     {
-        $db = new MySQLStocksRepository();
+        $db = new MySQLStockRepository();
         $money = $db->money();
         self::assertIsNumeric($money);
         $db->buyStock('MONEY', 1, 9);

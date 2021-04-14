@@ -6,14 +6,14 @@
         <input type="submit" class="button" value="Search">
     </form>
     {% if GET.symbol is defined %}
-        {% if SESSION[GET.symbol].currentPrice>0 %}
+        {% if stockExchange.currentPrice(GET.symbol)>0 %}
             <div class="inline-flex flex-nowrap justify-center items-center space-x-2">
-                <img src="{{ SESSION[GET.symbol].info.logo }}" class="h-8">
+                <img src="{{ stockExchange.info(GET.symbol).logo }}" class="h-8">
                 <span class="font-bold">{{ GET.symbol }}</span>
-                <span class="text-gray-400">{{ SESSION[GET.symbol].info.name }}</span>
+                <span class="text-gray-400">{{ stockExchange.info(GET.symbol).name }}</span>
                 <span class="text-base">{{ '$ ' }}</span>
                 <span class="font-bold">
-                    {{ SESSION[GET.symbol].currentPrice|format_number({fraction_digit: 2},locale='en') }}
+                    {{ stockExchange.currentPrice(GET.symbol)|format_number({fraction_digit: 2},locale='en') }}
                 </span>
             </div>
             <form method="post" action="/buy" class="inline-flex flex-nowrap text-xs items-end">
@@ -21,7 +21,7 @@
                 <div>
                     <label for="buy">Count</label><br>
                     <input type="text" id="buy" class="text-input" name="amount" pattern="^[0-9]+[\.]?[0-9]*$"
-                           oninput="document.getElementById('buy-m').value='$'+Math.round(this.value*{{ SESSION[GET.symbol].currentPrice }}*100)/100;
+                           oninput="document.getElementById('buy-m').value='$'+Math.round(this.value*{{ stockExchange.currentPrice(GET.symbol) }}*100)/100;
                                    document.getElementById('buy-button').disabled=
                                    document.getElementById('buy-m').value.substr(1)<=0 ||
                                    document.getElementById('buy-m').value.substr(1)>{{ money }}">
@@ -30,7 +30,7 @@
                     <label for="buy-m">Money</label><br>
                     <input type="text" id="buy-m" class="text-input" name="money" pattern="^[\$]?[0-9]+[\.]?[0-9]*$"
                            oninput="this.value=this.value[0]==='$'?this.value:'$'+this.value;
-                                   document.getElementById('buy').value=Math.round(this.value.substr(1)*10000/{{ SESSION[GET.symbol].currentPrice }})/10000">
+                                   document.getElementById('buy').value=Math.round(this.value.substr(1)*10000/{{ stockExchange.currentPrice(GET.symbol) }})/10000">
                 </div>
                 <input type="submit" id="buy-button" class="button h-7" value="Buy">
             </form>

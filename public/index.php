@@ -5,24 +5,27 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AppController;
 use App\Controllers\NotFoundController;
-use App\Repositories\MySQLStocksRepository;
-use App\Repositories\StocksRepository;
-use App\Services\FinnhubService;
-use App\Services\StockExchangeService;
+use App\Repositories\MySQLStockRepository;
+use App\Repositories\StockRepository;
+use App\Repositories\FinnhubRepository;
+use App\Repositories\StockExchangeRepository;
+use App\Services\StockTransactionsService;
+use App\Services\ViewService;
+use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\FilesystemCache;
 use League\Container\Container;
 
-
-session_start();
-
 $container = new Container();
-$container->add(StockExchangeService::class, FinnhubService::class);
-$container->add(StocksRepository::class, MySQLStocksRepository::class);
-$container->add(AppController::class)->addArguments([StockExchangeService::class, StocksRepository::class]);
-
+$container->add(Cache::class, FilesystemCache::class)->addArgument(__DIR__ . '/../storage/cache/');
+$container->add(StockExchangeRepository::class, FinnhubRepository::class)->addArgument(Cache::class);
+$container->add(StockRepository::class, MySQLStockRepository::class);
+$container->add(ViewService::class)->addArguments([StockExchangeRepository::class, StockRepository::class]);
+$container->add(StockTransactionsService::class)->addArguments([StockExchangeRepository::class, StockRepository::class]);
+$container->add(AppController::class)->addArguments([ViewService::class, StockTransactionsService::class]);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->get('/', [AppController::class, 'main']);
-    $r->post('/', [AppController::class, 'main']);
+    $r->get('/', [AppController::class, 'showMainPage']);
+    $r->post('/', [AppController::class, 'showMainPage']);
     $r->post('/buy', [AppController::class, 'buy']);
     $r->post('/sell', [AppController::class, 'sell']);
     $r->post('/delete', [AppController::class, 'delete']);

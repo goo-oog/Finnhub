@@ -8,7 +8,7 @@ use Dotenv\Dotenv;
 use PDO;
 use PDOException;
 
-class MySQLStocksRepository implements StocksRepository
+class MySQLStockRepository implements StockRepository
 {
     private PDO $pdo;
 
