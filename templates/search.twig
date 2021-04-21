@@ -3,7 +3,7 @@
         <label for="search" class="whitespace-nowrap">Search for stock:</label>
         <input type="search" class="text-input ml-2" id="search" maxlength="5" name="symbol" required
                oninput="this.value = this.value.toUpperCase()">
-        <input type="submit" class="button" value="Search">
+        <input type="submit" class="button ml-2" value="Search">
     </form>
     {% if GET.symbol is defined %}
         {% if stockExchange.currentPrice(GET.symbol)>0 %}
@@ -32,7 +32,7 @@
                            oninput="this.value=this.value[0]==='$'?this.value:'$'+this.value;
                                    document.getElementById('buy').value=Math.round(this.value.substr(1)*10000/{{ stockExchange.currentPrice(GET.symbol) }})/10000">
                 </div>
-                <input type="submit" id="buy-button" class="button h-7" value="Buy">
+                <input type="submit" id="buy-button" class="button h-7 ml-2" value="Buy">
             </form>
         {% else %}
             <div class="inline-flex text-yellow-300 justify-center">Stock with symbol "{{ GET.symbol }}" not found</div>
